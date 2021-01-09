@@ -49,9 +49,10 @@ public class Controlleur {
 	}
 	
 	@GetMapping("/form")
-	public ModelAndView form() {
-	    	ModelAndView mav= new ModelAndView("FormPerson.xhtml");    	
-		    return mav;
+	public String form(Model model) {
+	    	//ModelAndView mav= new ModelAndView("FormPerson.xhtml"); 
+	    	model.addAttribute("person",new Person());
+		    return "FormPerson";
 	}
 	
 	@GetMapping("/shearch")
@@ -87,13 +88,12 @@ public class Controlleur {
 		}
 	}
 	
-	@PostMapping("update")
-	public ModelAndView update(@ModelAttribute Person personne) { 
+	@PostMapping("/update")
+	public String update(@ModelAttribute Person personne,Model model) { 
 		try { 
-			person.addPerson(personne);
-			System.out.println(findById(personne.getId()));	
-			ModelAndView mav= new ModelAndView("GetId.xhtml"); 
-		    return mav;
+			person.addPerson(personne);	
+			model.addAttribute("person", personne);
+		    return "UpdatePerson";
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 			return null;
@@ -101,7 +101,7 @@ public class Controlleur {
 	}
 	
 	@RequestMapping(value="/updatePerson", method=RequestMethod.POST)
-	public ModelAndView updateperson(@ModelAttribute Person personne) { 
+	public ModelAndView updateperson(@ModelAttribute Person personne,Model model) { 
 		try {
 			System.out.println("HELLO "+personne.getId());
 			ModelAndView mav= new ModelAndView("UpdatePerson.xhtml"); 
